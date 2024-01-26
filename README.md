@@ -14,3 +14,15 @@ Install Express Validator
 ```sh
 npm i express-validator
 ```
+
+## Cookies
+Cookies are small data that web server sends to clients/web-browsers
+
+server --> browser
+
+After that, browser can send back the cookies in subsequent http calls. This helps the server to remember something about client.
+
+Install Cookie Parser
+```sh
+npm i cookie-parser
+```
