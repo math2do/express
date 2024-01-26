@@ -1,6 +1,6 @@
 import express from "express";
 import { query, validationResult, body, matchedData, checkSchema } from "express-validator";
-import { createUserValidationSchema } from "./utils/validationSchemas";
+import { createUserValidationSchema } from "./utils/validationSchemas.mjs";
 
 const app = express();
 app.use(express.json());
@@ -57,27 +57,17 @@ app.get("/api/users",
   });
 
 // create user
-app.post("/api/users", [
+app.post("/api/users", checkSchema(createUserValidationSchema), (req, res) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(400).send({ errors: result.array() });
+  }
 
-  // validation on username
-  body("username").
-    isString().withMessage("username must be string").
-    notEmpty().withMessage("username can't be empty").
-    isLength({ min: 5, max: 32 }).withMessage("username have length between 3-32"),
-  // validation on displayName
-  body("displayName").notEmpty().withMessage("displayName can't be empty")],
-
-  (req, res) => {
-    const result = validationResult(req);
-    if (!result.isEmpty()) {
-      return res.status(400).send({ errors: result.array() });
-    }
-
-    const user = matchedData(req);  // validated req.body
-    const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...user };
-    mockUsers.push(newUser);
-    return res.sendStatus(201);
-  });
+  const user = matchedData(req);  // validated req.body
+  const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...user };
+  mockUsers.push(newUser);
+  return res.sendStatus(201);
+});
 
 // resolveIndexByUserId middleware attaches 'userIndex' and 'parseId' into req properties
 const resolveIndexByUserId = (req, res, next) => {
