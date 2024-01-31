@@ -38,3 +38,11 @@ Install Cookie Parser
 ```sh
 npm i cookie-parser
 ```
+
+### Sessions
+Session is used to track each users. Server generates some session for the requesting user, and set the session_id in cookie for subsequent requests.
+
+Install express-session module
+```sh
+npm i express-session
+```
