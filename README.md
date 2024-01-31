@@ -1,3 +1,15 @@
+## Run Project
+After cloning the project, install all node depedencies using
+```sh
+npm install
+```
+
+Run the project using
+```sh
+npm run start:dev
+```
+
+## Express Framework
 Init this project as node module.
 ```sh
 npm init -y
@@ -15,12 +27,12 @@ Install Express Validator
 npm i express-validator
 ```
 
-## Cookies
+### Cookies
 Cookies are small data that web server sends to clients/web-browsers
 
 server --> browser
 
-After that, browser can send back the cookies in subsequent http calls. This helps the server to remember something about client.
+After that, browser can send back the cookies in subsequent http calls. This helps the server to remember something about client. The server can set timeout to cookie after which client will not send the cookie to server. Use following node package to easily use/parse cookies.
 
 Install Cookie Parser
 ```sh

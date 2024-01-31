@@ -14,7 +14,7 @@ app.use(routes);
 const PORT = process.env.PORT || 3002;
 
 app.get("/", (_, res) => {
-  res.cookie("hello", "world", { maxAge: 24 * 60 * 60 * 1000 }); // expires after a day
+  res.cookie("hello", "world", { maxAge: 10 * 1000 }); // To expires after a day use : 24 * 60 * 60 * 1000 
   res.status(200).send({ "msg": "Hello" });
 });
 
