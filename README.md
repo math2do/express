@@ -46,3 +46,9 @@ Install express-session module
 ```sh
 npm i express-session
 ```
+
+### Authentication with Passport.js
+Install `passport` and `passoport-local`
+```sh
+npm i passport passport-local
+```

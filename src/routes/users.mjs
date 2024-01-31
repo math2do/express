@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { query, validationResult, body, matchedData, checkSchema } from "express-validator";
 import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
-import { mockUsers } from '../utils/constants.mjs';
+import { mockUsers } from "../utils/constants.mjs";
 import { resolveIndexByUserId } from "../utils/middlewares.mjs";
+import passport from 'passport';
 
 const router = Router();
 
@@ -86,6 +87,65 @@ router.delete("/api/users/:id", (req, res) => {
 
   mockUsers.splice(userIndex, 1);
   res.sendStatus(200);
+});
+
+// login an user by modifying/initialising session 
+router.post("/api/auth", (req, res) => {
+  const { body: { username, password } } = req;
+
+  const user = mockUsers.find((user) => user.username === username && user.password === password);
+  if (!user) {
+    res.status(401).send({ msg: "BAD CREDENTIALS" });
+  }
+
+  // add/modify session properties to make it initialised
+  req.session.user = user;
+  res.status(200).send(user);
+});
+
+// check session status
+router.get("/api/auth/status", (req, res) => {
+  return req.session.user ?
+    res.status(200).send(req.session.user) :
+    res.status(401).send({ msg: "Not Authenticated" });
+
+});
+
+// add to cart for authenticated users only
+router.post("/api/cart", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).send({ msg: "Not Authenticated" });
+  }
+  const { body: item } = req;  // body is renamed to item
+  const { cart } = req.session;
+  if (cart) {
+    cart.push(item);
+  } else {
+    req.session.cart = [item];
+  }
+  res.status(200).send({ msg: "Added to cart", cart: req.session.cart });
+});
+
+// authenticate using passport
+router.post("/v2/api/auth", passport.authenticate("local"), (req, res) => {
+  res.sendStatus(200);
+});
+
+router.get("/v2/api/auth/status", (req, res) => {
+  return req.user ? res.send(req.user) : res.sendStatus(401);
+});
+
+router.post("/v2/api/auth/logout", (req, res) => {
+  if (!req.user) {
+    return res.sendStatus(401);
+  }
+
+  req.logout((err) => {
+    if (err) {
+      return res.sendStatus(400);
+    }
+    res.sendStatus(200);
+  });
 });
 
 export default router;
