@@ -64,3 +64,9 @@ Password stored in db must not be in plain text. Hash them using `bcrypt`.
 ```sh
 npm i bcrypt
 ```
+
+## mongodb as session store 
+Install the package `connect-mongo`. You can select any session store given in express-session doc.
+```sh
+npm i connect-mongo
+```

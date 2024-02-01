@@ -6,6 +6,7 @@ import session from "express-session";
 import passport from "passport";
 import "./strategies/local-strategy.mjs";
 import mongoose from "mongoose";
+import MongoStore from "connect-mongo";
 
 const app = express();
 
@@ -20,7 +21,8 @@ app.use(session({
   secret: "SECRET_TO_SIGN_COOKIE",
   saveUninitialized: false, // check doc, for login this should be 'false' to reduce storage space. Unitiliased means new, not modified
   resave: false,
-  cookie: { maxAge: 60 * 10 * 1000 },
+  cookie: { maxAge: 10 * 60 * 1000 },  // 10 mins
+  store: MongoStore.create({ client: mongoose.connection.getClient() }),
 }));
 
 // after above sesssion we register passport
