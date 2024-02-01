@@ -5,6 +5,7 @@ import { mockUsers } from "../utils/constants.mjs";
 import { resolveIndexByUserId } from "../utils/middlewares.mjs";
 import passport from "passport";
 import { User } from "../mongoose/schemas/user.mjs";
+import { hashPassword } from "../utils/helper.mjs";
 
 const router = Router();
 
@@ -52,6 +53,7 @@ router.post("/v2/api/users", checkSchema(createUserValidationSchema), async (req
   }
 
   const user = matchedData(req);  // validated req.body
+  user.password = hashPassword(user.password);
   const newUser = new User(user);
   try {
     const savedUser = await newUser.save();

@@ -58,3 +58,9 @@ Install `mongoose` using
 ```sh
 npm i mongoose
 ```
+
+## Hash password
+Password stored in db must not be in plain text. Hash them using `bcrypt`.
+```sh
+npm i bcrypt
+```

@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import { User } from "../mongoose/schemas/user.mjs";
+import { samePassword } from "../utils/helper.mjs";
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -25,7 +26,7 @@ export default passport.use(
       if (!findUser) {
         throw new Error("User not found");
       }
-      if (findUser.password !== password) {
+      if (!samePassword(password, findUser.password)) {
         throw new Error("Invalid credentials");
       }
       done(null, findUser);
