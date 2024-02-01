@@ -3,7 +3,8 @@ import { query, validationResult, body, matchedData, checkSchema } from "express
 import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import { mockUsers } from "../utils/constants.mjs";
 import { resolveIndexByUserId } from "../utils/middlewares.mjs";
-import passport from 'passport';
+import passport from "passport";
+import { User } from "../mongoose/schemas/user.mjs";
 
 const router = Router();
 
@@ -42,6 +43,22 @@ router.post("/api/users", checkSchema(createUserValidationSchema), (req, res) =>
   const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...user };
   mockUsers.push(newUser);
   return res.sendStatus(201);
+});
+
+router.post("/v2/api/users", checkSchema(createUserValidationSchema), async (req, res) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(400).send({ errors: result.array() });
+  }
+
+  const user = matchedData(req);  // validated req.body
+  const newUser = new User(user);
+  try {
+    const savedUser = await newUser.save();
+    return res.status(201).send(savedUser);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
 });
 
 // handle request path param

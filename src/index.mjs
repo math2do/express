@@ -5,8 +5,14 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
 import "./strategies/local-strategy.mjs";
+import mongoose from "mongoose";
 
 const app = express();
+
+mongoose.connect("mongodb://localhost:27017/express_tutorial").
+  then(() => { console.log("connected to database"); }).
+  catch((err) => { console.log(`Error: ${err}`); });
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(loggingMiddleware);

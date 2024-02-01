@@ -52,3 +52,9 @@ Install `passport` and `passoport-local`
 ```sh
 npm i passport passport-local
 ```
+
+## MongoDB and Mongoose
+Install `mongoose` using
+```sh
+npm i mongoose
+```
