@@ -130,6 +130,14 @@ router.get("/api/auth/status", (req, res) => {
 
 });
 
+// check session status
+router.get("/api/auth/discord/status", (req, res) => {
+  return req.user ?
+    res.status(200).send(req.user) :
+    res.status(401).send({ msg: "Not Authenticated" });
+
+});
+
 // add to cart for authenticated users only
 router.post("/api/cart", (req, res) => {
   if (!req.session.user) {
@@ -165,6 +173,12 @@ router.post("/v2/api/auth/logout", (req, res) => {
     }
     res.sendStatus(200);
   });
+});
+
+// discord authentication
+router.get("/api/discord/auth", passport.authenticate("discord"));
+router.get("/api/auth/discord/redirect", passport.authenticate("discord"), (req, res) => {
+  res.sendStatus(200);
 });
 
 export default router;

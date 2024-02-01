@@ -9,6 +9,15 @@ Run the project using
 npm run start:dev
 ```
 
+Create `.env` file and add environment variables. For this we need to install `dotenv`.
+```sh
+npm i dotenv
+```
+Create `.env` file and add variables. In the script add `start:dev` as:
+```sh
+nodemon -r dotenv/config ./src/index.mjs
+```
+
 ## Express Framework
 Init this project as node module.
 ```sh
@@ -69,4 +78,10 @@ npm i bcrypt
 Install the package `connect-mongo`. You can select any session store given in express-session doc.
 ```sh
 npm i connect-mongo
+```
+
+## OAuth2 using discord
+Install discord strategies from passport
+```sh
+npm i passport-discord
 ```
